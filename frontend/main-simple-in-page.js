@@ -6,7 +6,7 @@ for (let image of images) {
   let { latitude, longitude } = image.metadata;
   html += `<section class="geo-image">
       <img
-        src="/images/${image.fileName}" 
+        src="/images/${image.fileName}"
         alt="Arable land at latitude ${latitude}, longitude ${longitude}"
         data-longitude="${longitude}"
         data-latitude="${latitude}"
@@ -40,7 +40,8 @@ function initMap() {
     // settings - coordinates to center the map around, zoom level
     {
       center: myPosition,
-      zoom: 13
+      zoom: 13,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
     }
   );
 }
@@ -55,9 +56,10 @@ let script = document.createElement('script');
 script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly';
 document.body.append(script);
 
-// Declare infoWindow here so that we can 
-// close the old window before opening a new on
-let infoWindow;
+// Create the marker variable outside the listener
+// so that it is available on next click
+// (where we can remove the previous marker)
+let marker;
 
 // Listen to clicks on the images
 document.body.addEventListener('click', event => {
@@ -65,10 +67,14 @@ document.body.addEventListener('click', event => {
   if (!img) { return; }
   let longitude = +img.getAttribute('data-longitude');
   let latitude = +img.getAttribute('data-latitude');
-  infoWindow && infoWindow.close();
-  infoWindow = new google.maps.InfoWindow({
-    position: { lat: latitude, lng: longitude }
+  // Remove previous marker if it exists
+  marker && marker.setMap(null);
+  // Set a new marker
+  marker = new google.maps.Marker({
+    map,
+    position: { lat: latitude, lng: longitude },
+    title: 'Hey kid!'
   });
-  infoWindow.setContent('Here');
-  infoWindow.open(map);
+  // Pan to - pan the maker into view!
+  map.panTo({ lat: latitude, lng: longitude });
 });
