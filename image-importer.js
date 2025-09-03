@@ -3,7 +3,10 @@ import exifr from 'exifr';
 import mysql from 'mysql2/promise';
 import dbCredentials from './db-credentials.js';
 
-const imageFolder = './client/images';
+// DO NOT RUN - PLEASE DO NOT RUN THIS IT WILL CREATE DUPLICATES!
+process.exit();
+
+const imageFolder = './frontendx/images';
 const db = await mysql.createConnection(dbCredentials);
 let files = fs.readdirSync(imageFolder).filter(x => x.endsWith('.JPG'));
 

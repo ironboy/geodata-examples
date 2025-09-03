@@ -11,7 +11,7 @@ async function query(sql, listOfValues) {
   return result[0];
 }
 
-server.use(express.static('client'));
+server.use(express.static('frontend'));
 
 // Note: Port 5173 is needed for the API key we
 // use for Google Maps in the harder / more advanced
