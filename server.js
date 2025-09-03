@@ -29,9 +29,7 @@ server.get('/api/images', async (request, response) => {
 
 // For the harder / more advanced example
 server.get('/api/map-image-search/:latitude/:longitude/:radius', async (request, response) => {
-  let latitude = request.params.latitude;
-  let longitude = request.params.longitude;
-  let radius = request.params.radius;
+  let { latitude, longitude, radius } = request.params;
   let result = await query(`
     SELECT * FROM (
       SELECT *,(((acos(sin((?*pi()/180)) * sin((metadata -> '$.latitude' *pi()/180))+cos((?*pi()/180)) * cos((metadata -> '$.latitude' * pi()/180)) * cos(((? - metadata -> '$.longitude')*pi()/180))))*180/pi())*60*1.1515*1.609344) as distance FROM images) AS subquery
